@@ -96,7 +96,7 @@ public class WebController {
 
 		// Stored XSS
 		model.addAttribute("name", resultMap.get("name"));
-		return "update";
+		return "ok";
 	}
 
 	@PostMapping("/update")
@@ -111,7 +111,7 @@ public class WebController {
 			// Reflected XSS
 			model.addAttribute("name", newName);
 		}
-		return "update";
+		return "ok";
 	}
 
 	@PostMapping("/checkdb")
