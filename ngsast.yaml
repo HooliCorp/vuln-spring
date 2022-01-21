@@ -13,6 +13,8 @@ finding-modifications:
     tags:
       - key: stride
         value: spoofing
+      - key: cwe_category
+        value: spoofing
   stride_disclosure:
     filter:
       category:
@@ -22,4 +24,6 @@ finding-modifications:
         - Deserialization
     tags:
       - key: stride
+        value: information disclosure
+      - key: cwe_category
         value: information disclosure
