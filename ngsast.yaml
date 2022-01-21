@@ -1,0 +1,13 @@
+ngsast:
+- app:
+    name: vuln-spring
+    modify-findings:
+      - stride_spoofing
+finding-modifications:
+  stride_spoofing:
+    filter:
+      category:
+        - Session Injection
+    tags:
+      - key: stride
+        value: spoofing
