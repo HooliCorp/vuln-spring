@@ -13,7 +13,7 @@ finding-modifications:
     tags:
       - key: stride
         value: spoofing
-      - key: cwe_category
+      - key: category
         value: spoofing
   stride_disclosure:
     filter:
@@ -25,5 +25,5 @@ finding-modifications:
     tags:
       - key: stride
         value: information disclosure
-      - key: cwe_category
+      - key: category
         value: information disclosure

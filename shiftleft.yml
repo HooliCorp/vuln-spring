@@ -2,13 +2,9 @@ build_rules:
   - id: stride_model
     severity: [critical, moderate]
     finding_types: [vuln]
-    owasp_category:
-      - a1-injection
-      - a2-broken-authentication
-      - a3-sensitive-data-exposure
-      - a4-xxe
-      - a5-broken-access-control
-      - a6-security-misconfiguration
+    type:
+      - spoofing
+      - information disclosure
   - id: only_reachable
     severity: [critical, moderate]
     finding_types: [oss_vuln]
