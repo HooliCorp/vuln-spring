@@ -3,11 +3,23 @@ ngsast:
     name: vuln-spring
     modify-findings:
       - stride_spoofing
+      - stride_disclosure
 finding-modifications:
   stride_spoofing:
     filter:
       category:
         - Session Injection
+        - Cookie Injection
     tags:
       - key: stride
         value: spoofing
+  stride_disclosure:
+    filter:
+      category:
+        - Sensitive Data Usage
+        - SQL Injection
+        - XXE
+        - Deserialization
+    tags:
+      - key: stride
+        value: information disclosure
