@@ -28,6 +28,8 @@ jobs:
         ${GITHUB_WORKSPACE}/sl analyze --wait --verbose --app $(basename $(pwd)) \
           --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} \
           --javasrc --cpg .
+      env:
+        SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}          
     - name: Validate Build Rules      
       if: ${{ github.event_name == 'pull_request' }}
       run: |
