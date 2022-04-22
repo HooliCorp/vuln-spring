@@ -28,6 +28,9 @@ jobs:
         ${GITHUB_WORKSPACE}/sl analyze --wait --verbose --app $(basename $(pwd)) \
           --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} \
           --javasrc --cpg .
+    - name: Validate Build Rules      
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
         ${GITHUB_WORKSPACE}/sl check-analysis --app $(basename $(pwd)) --v2 --config shiftleft.yml \
           --source tag.branch=master --branch "${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
           --report \
