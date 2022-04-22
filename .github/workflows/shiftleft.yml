@@ -37,5 +37,3 @@ jobs:
           --github-token=${{ secrets.GITHUB_TOKEN }}
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-        SL_CPG_OPTS: "-J-Xms2g -J-Xmx7g"
-        SHIFTLEFT_JAVA_OPTS: "-Xms2g -Xmx7g"
