@@ -1,4 +1,11 @@
 build_rules:
+  - id: non-high-vuln
+    finding_types:
+      - vuln
+      - secret
+    severity:
+      - moderate
+      - critical
   - id: only_reachable
     severity: [critical, moderate]
     finding_types: [oss_vuln]
