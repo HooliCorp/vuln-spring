@@ -1,0 +1,9 @@
+methods:
+  - pattern: Logger.debug
+    tags:
+      - key: category
+        value: Sensitive Data Leak
+  - pattern: addressValidation
+    tags:
+      - key: category
+        value: Deserialization

@@ -63,7 +63,7 @@ public class WebController {
 	public String login(HttpSession session, @RequestParam(name = "username", required = true) String username,
 			@RequestParam(name = "password", required = true) String password, Model model) {
 		if (loginSuccess(username, password)) {
-			logger.debug(username + ":" + password); // Issue - password logged
+			// logger.debug(username + ":" + password);
 			session.setAttribute("username", username);
 			return "redirect:home";
 		}
@@ -74,8 +74,8 @@ public class WebController {
 		if (username == null || password == null)
 			return false;
 		// Issue - SQL Injection
-		String query = "SELECT * FROM users WHERE USERNAME=\"" + username + "\" AND PASSWORD=\"" + password + "\"";
-		Map<String, Object> result = jdbcTemplate.queryForMap(query);
+		String query = "SELECT * FROM users WHERE USERNAME=? AND PASSWORD=?";
+		Map<String, Object> result = jdbcTemplate.queryForMap(query, username, password);
 		if (result.containsKey("username"))
 			return true;
 		else
@@ -103,8 +103,8 @@ public class WebController {
 	public String update(HttpSession session, @RequestParam(name = "newname") String newName, Model model) {
 		String statement = "UPDATE users SET name = ? WHERE username = ?";
 		int status = jdbcTemplate.update(statement, new Object[] { newName, session.getAttribute("username") });
-		logger.info("Running statement: " + statement + newName + " " + session.getAttribute("username"));
-		logger.info("Result status for transfer is " + String.valueOf(status));
+		logger.debug("Running statement: " + statement + newName + " " + session.getAttribute("username"));
+		logger.debug("Result status for transfer is " + String.valueOf(status));
 
 		if (status == 1) {
 			model.addAttribute("error", "Update Failed!");
@@ -152,7 +152,7 @@ public class WebController {
 		// Sanity check for transaction
 		if (amount < 0) {
 			model.addAttribute("error", "Negative amount value!");
-			logger.info("negative amount value");
+			logger.debug("negative amount value");
 			return "transfer";
 		}
 
@@ -164,7 +164,7 @@ public class WebController {
 			toAccountBalance = (Float) toAccountResultMap.get("balance");
 		} catch (EmptyResultDataAccessException e) {
 			model.addAttribute("error", "Invalid To Account");
-			logger.info("Invalid To Account");
+			logger.debug("Invalid To Account");
 			return "transfer";
 		}
 
@@ -175,28 +175,28 @@ public class WebController {
 
 		fromAccountBalance = (float) fromResultMap.get("balance");
 		fromAccount = (String) fromResultMap.get("accountnumber");
-		logger.info("got balance = " + String.valueOf(fromAccountBalance));
+		logger.debug("got balance = " + String.valueOf(fromAccountBalance));
 
 		float newBalance = fromAccountBalance - amount;
 		if (newBalance < 0) {
 			model.addAttribute("error", "not enough balance");
-			logger.info("Not enought balance");
+			logger.debug("Not enought balance");
 			return "transfer";
 		}
 
 		// Perform transaction
 		String toAccStatement = "UPDATE users SET balance = ? WHERE accountnumber = ?";
 		int toAccStatus = jdbcTemplate.update(toAccStatement, new Object[] { toAccountBalance + amount, toAccount });
-		logger.info(
+		logger.debug(
 				"Running statement: " + toAccStatement + String.valueOf(toAccountBalance + amount) + " " + toAccount);
-		logger.info("Result status for transfer is " + String.valueOf(toAccStatus));
+		logger.debug("Result status for transfer is " + String.valueOf(toAccStatus));
 
 		String fromAccStatement = "UPDATE users SET balance = ? WHERE accountnumber = ?";
 		int fromAccStatus = jdbcTemplate.update(toAccStatement,
 				new Object[] { fromAccountBalance - amount, fromAccount });
-		logger.info("Running statement: " + fromAccStatement + String.valueOf(fromAccountBalance - amount) + " "
+		logger.debug("Running statement: " + fromAccStatement + String.valueOf(fromAccountBalance - amount) + " "
 				+ fromAccount);
-		logger.info("Result status for transfer is " + String.valueOf(fromAccStatus));
+		logger.debug("Result status for transfer is " + String.valueOf(fromAccStatus));
 
 		if (toAccStatus == 1 && fromAccStatus == 1) {
 			model.addAttribute("balance", newBalance);
@@ -303,6 +303,9 @@ public class WebController {
 
 	@PostMapping("/address")
 	public String addressValidation(Model model, @RequestParam String encodedString) {
+		if (encodedString == null || encodedString.length() > 100) {
+			return "invalid";
+		}
 		byte[] data = Base64.getDecoder().decode(encodedString);
 		ObjectInputStream ois;
 		try {
