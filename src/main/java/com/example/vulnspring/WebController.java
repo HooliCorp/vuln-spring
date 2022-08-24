@@ -124,6 +124,7 @@ public class WebController {
 	}
 
 	@GetMapping("/checkdb")
+	@PostMapping("/secret")
 	public String checkDB() {
 		return "checkdb";
 	}
