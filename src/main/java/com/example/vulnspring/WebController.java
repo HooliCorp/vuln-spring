@@ -129,7 +129,7 @@ public class WebController {
 	}
 
 	@GetMapping("/secret")
-	public String checkDB() {
+	public String checkDB2() {
 		return "secretstring";
 	}
 
