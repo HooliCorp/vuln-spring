@@ -51,7 +51,7 @@ jobs:
           docker build -t vuln_spring .
           ${GITHUB_WORKSPACE}/sl analyze --wait --app $(basename $(pwd)) --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --container vuln_spring --cpg app.jar
           ${GITHUB_WORKSPACE}/sl check-analysis --app $(basename $(pwd)) --v2 --config shiftleft.yml \
-            --source tag.branch=master --branch "${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
+            --source tag.branch=master --target tag.branch="${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
             --report \
             --github-pr-number=${{github.event.number}} \
             --github-pr-user=${{ github.repository_owner }} \
