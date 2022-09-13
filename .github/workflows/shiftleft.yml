@@ -9,7 +9,7 @@ on:
 
 jobs:
   NextGen-Static-Analysis:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup Java JDK
@@ -49,7 +49,7 @@ jobs:
         if [ "$BUILT" = "1" ] && [ -d "$TARGET_DIR" ]; then
           jar cvf app.jar -C $TARGET_DIR .
           docker build -t vuln_spring .
-          ${GITHUB_WORKSPACE}/sl analyze --wait --app $(basename $(pwd)) --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --container vuln_spring --cpg app.jar
+          ${GITHUB_WORKSPACE}/sl analyze --wait --app $(basename $(pwd)) --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --container vuln_spring --remediation-config remediation.yaml --java --cpg app.jar
           ${GITHUB_WORKSPACE}/sl check-analysis --app $(basename $(pwd)) --v2 --config shiftleft.yml \
             --source tag.branch=master --target tag.branch="${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
             --report \
@@ -59,7 +59,7 @@ jobs:
             --github-token=${{ secrets.GITHUB_TOKEN }}
           # ${GITHUB_WORKSPACE}/sl check-analysis --app $(basename $(pwd)) --v2 --config shiftleft.yml
         else
-          echo "Unable to build the project automatically. Please follow the instructions in our documentation to setup this project - https://docs.shiftleft.io/ngsast/analyzing-applications/java"  
+          echo "Unable to build the project automatically. Please follow the instructions in our documentation to setup this project - https://docs.shiftleft.io/ngsast/analyzing-applications/java"
         fi
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}

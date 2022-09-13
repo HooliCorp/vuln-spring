@@ -74,8 +74,8 @@ public class WebController {
 		if (username == null || password == null)
 			return false;
 		// Issue - SQL Injection
-		String query = "SELECT * FROM users WHERE USERNAME=\"" + username + "\" AND PASSWORD=\"" + password + "\"";
-		Map<String, Object> result = jdbcTemplate.queryForMap(query);
+		String query = "SELECT * FROM users WHERE USERNAME=? AND PASSWORD=?";
+		Map<String, Object> result = jdbcTemplate.queryForMap(query, username, password);
 		if (result.containsKey("username"))
 			return true;
 		else
@@ -117,8 +117,11 @@ public class WebController {
 	@PostMapping("/checkdb")
 	public String checkDB(@RequestParam(name = "dbpath") String dbpath, Model model)
 			throws MalformedURLException, IOException {
-		// Issue - SSRF
-		String out = new Scanner(new URL(dbpath).openStream(), "UTF-8").useDelimiter("\\A").next();
+		String dbpathUrl = "https://shiftleft.io";
+		if (dbpath.equals("staging")) {
+			dbpathUrl = "https://staging.shiftleft.io";
+		}
+		String out = new Scanner(new URL(dbpathUrl).openStream(), "UTF-8").useDelimiter("\\A").next();
 		model.addAttribute("dbResponse", out);
 		return "checkdb";
 	}
@@ -303,6 +306,9 @@ public class WebController {
 
 	@PostMapping("/address")
 	public String addressValidation(Model model, @RequestParam String encodedString) {
+		if (encodedString == null || encodedString.length() > 100) {
+			return "invalid";
+		}
 		byte[] data = Base64.getDecoder().decode(encodedString);
 		ObjectInputStream ois;
 		try {
