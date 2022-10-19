@@ -16,6 +16,14 @@ jobs:
       uses: actions/setup-java@v1.4.3
       with:
         java-version: 1.8
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Checkout
+      uses: actions/checkout@v2.5.0
+      with:
+        repository: "ShiftLeftSecurity/field-integrations"
     - name: Download ShiftLeft cli
       run: |
         curl https://cdn.shiftleft.io/download/sl > ${GITHUB_WORKSPACE}/sl && chmod a+rx ${GITHUB_WORKSPACE}/sl
@@ -50,6 +58,10 @@ jobs:
           jar cvf app.jar -C $TARGET_DIR .
           docker build -t vuln_spring .
           ${GITHUB_WORKSPACE}/sl analyze --wait --app $(basename $(pwd)) --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --vcs-prefix-correction "*=src/main/java" --java --container vuln_spring --cpg app.jar
+
+          # Run best fix script
+          pip3 install -r shiftleft-utils/requirements.txt
+          python3 shiftleft-utils/bestfix.py -a $(basename $(pwd))
           # To run in comparison mode use the below instead of --branch
           # --source tag.branch=master --target tag.branch="${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
           ${GITHUB_WORKSPACE}/sl check-analysis --app $(basename $(pwd)) --v2 --config shiftleft.yml \
