@@ -35,7 +35,6 @@ jobs:
           python3 field-integrations/shiftleft-utils/bestfix.py -a $(basename $(pwd))
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-        SL_CPG_OPTS: "-J-Xms2g -J-Xmx7g"
-        SHIFTLEFT_JAVA_OPTS: "-Xms2g -Xmx7g"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PYTHONIOENCODING: "utf-8"
         PYTHONUTF8: 1
