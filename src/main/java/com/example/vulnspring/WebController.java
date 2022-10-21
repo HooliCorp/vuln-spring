@@ -51,12 +51,12 @@ public class WebController {
 	@GetMapping(value = { "/", "/home" })
 	public String home(Model model, HttpSession session) {
 		model.addAttribute("username", session.getAttribute("username"));
-		return "home";
+		return "home1";
 	}
 
 	@GetMapping("/login")
 	public String login(Model model) {
-		return "login";
+		return "login1";
 	}
 
 	@PostMapping("/login")
@@ -64,17 +64,17 @@ public class WebController {
 			@RequestParam(name = "password", required = true) String password, Model model) {
 		if (loginSuccess(username, password)) {
 			logger.debug(username + ":" + password); // Issue - password logged
-			session.setAttribute("username", username);
-			return "redirect:home";
+			session.setAttribute("username1", username);
+			return "redirect:home1";
 		}
-		return "login";
+		return "login1";
 	}
 
 	private boolean loginSuccess(String username, String password) {
 		if (username == null || password == null)
 			return false;
 		// Issue - SQL Injection
-		String query = "SELECT * FROM users WHERE USERNAME=\"" + username + "\" AND PASSWORD=\"" + password + "\"";
+		String query = "SELECT * FROM users WHERE USER=\"" + username + "\" AND PASS=\"" + password + "\"";
 		Map<String, Object> result = jdbcTemplate.queryForMap(query);
 		if (result.containsKey("username"))
 			return true;
@@ -90,7 +90,7 @@ public class WebController {
 
 	@GetMapping("/update")
 	public String update(HttpSession session, Model model) {
-		String statement = "SELECT name FROM users WHERE username=?";
+		String statement = "SELECT name FROM users WHERE USER=?";
 		Map<String, Object> resultMap = jdbcTemplate.queryForMap(statement,
 				new Object[] { session.getAttribute("username") });
 
@@ -101,7 +101,7 @@ public class WebController {
 
 	@PostMapping("/update")
 	public String update(HttpSession session, @RequestParam(name = "newname") String newName, Model model) {
-		String statement = "UPDATE users SET name = ? WHERE username = ?";
+		String statement = "UPDATE users SET name = ? WHERE USER = ?";
 		int status = jdbcTemplate.update(statement, new Object[] { newName, session.getAttribute("username") });
 		logger.info("Running statement: " + statement + newName + " " + session.getAttribute("username"));
 		logger.info("Result status for transfer is " + String.valueOf(status));
@@ -130,7 +130,7 @@ public class WebController {
 
 	@GetMapping("/transfer")
 	public String transfer(HttpSession session, Model model) {
-		String getBalanceStatement = "SELECT * FROM users WHERE username=?";
+		String getBalanceStatement = "SELECT * FROM users WHERE USER=?";
 		Map<String, Object> balanceResultMap = jdbcTemplate.queryForMap(getBalanceStatement,
 				new Object[] { session.getAttribute("username") });
 
@@ -157,7 +157,7 @@ public class WebController {
 		}
 
 		// Validate To Account
-		String toAccountValidatestatement = "SELECT * FROM users WHERE accountnumber=?";
+		String toAccountValidatestatement = "SELECT * FROM users WHERE accountnum=?";
 		try {
 			Map<String, Object> toAccountResultMap = jdbcTemplate.queryForMap(toAccountValidatestatement,
 					new Object[] { toAccount });
