@@ -30,7 +30,7 @@ jobs:
     - name: Build and Analyze
       run: |
           # Run best fix script
-          git clone https://github.com/ShiftLeftSecurity/field-integrations.git --branch feature/gh --single-branch
+          git clone https://github.com/ShiftLeftSecurity/field-integrations.git
           pip3 install -r field-integrations/shiftleft-utils/requirements.txt
           python3 field-integrations/shiftleft-utils/bestfix.py -a $(basename $(pwd))
       env:
