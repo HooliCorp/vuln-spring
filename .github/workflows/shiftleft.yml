@@ -18,7 +18,7 @@ jobs:
         java-version: '8'
     - name: Setup Python
       uses: actions/setup-python@v4.3.0
-      with:        
+      with:
         python-version: '3.10'
     - name: Download ShiftLeft cli
       run: |
@@ -55,7 +55,7 @@ jobs:
           docker build -t vuln_spring .
           #####
           # Run SL analyze
-          ${GITHUB_WORKSPACE}/sl analyze --wait --app $(basename $(pwd)) --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --vcs-prefix-correction "*=src/main/java" --java --container vuln_spring app.jar
+          ${GITHUB_WORKSPACE}/sl analyze --wait --remediation-config remediation.yaml --app $(basename $(pwd)) --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --vcs-prefix-correction "*=src/main/java" --java --container vuln_spring app.jar
           #####
           #####
           # Run best fix script
@@ -63,7 +63,7 @@ jobs:
           pip3 install -r field-integrations/shiftleft-utils/requirements.txt
           python3 field-integrations/shiftleft-utils/bestfix.py -a $(basename $(pwd)) -o $GITHUB_WORKSPACE/ngsast-bestfix-report.html
           #####
-          
+
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
             # To run in comparison mode use the below instead of --branch
             # --source tag.branch=master --target tag.branch="${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
@@ -88,4 +88,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: ngsast-bestfix-report
-        path: ngsast-bestfix-report.html     
+        path: ngsast-bestfix-report.html
