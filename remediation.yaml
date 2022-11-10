@@ -1,0 +1,25 @@
+methods:
+  - method: org.slf4j.Logger.debug:void(java.lang.String)
+    tags:
+      - key: category
+        value: Log Forging
+  - method: org.slf4j.Logger.info:void(java.lang.String)
+    tags:
+      - key: category
+        value: Log Forging
+  - method: org.slf4j.Logger.debug:void(java.lang.String)
+    tags:
+      - key: category
+        value: Sensitive Data Leak
+  - method: org.slf4j.Logger.info:void(java.lang.String)
+    tags:
+      - key: category
+        value: Sensitive Data Leak
+  - method: com.example.vulnspring.WebController.addressValidation:java.lang.String(org.springframework.ui.Model,java.lang.String)
+    tags:
+      - key: category
+        value: Deserialization
+  - method: com.example.vulnspring.WebController.checkDB:java.lang.String(java.lang.String,org.springframework.ui.Model)
+    tags:
+      - key: category
+        value: SSRF
