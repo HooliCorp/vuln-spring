@@ -14,10 +14,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: AppThreat/cpggen-action@main
-      with:
-        lang: jar
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        AT_DEBUG_MODE: debug
-        
