@@ -1,10 +1,9 @@
 ---
-# This workflow integrates ShiftLeft with GitHub
+# This workflow integrates Qwiet.AI with GitHub
 # Visit https://docs.shiftleft.io for help
 name: Qwiet AI
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
